@@ -29,11 +29,13 @@ public:
 
   /* ************************************************************************ */
 
+  // Copy/Move assignment of abstract types is not possible. (delete)
+
   //Copy assignment
-  Set & operator=(Set &) = delete; // Copy assignment of abstract types is not possible.
+  Set & operator=(Set &) = delete; 
 
   // Move assignment
-  Set & operator=(Set &&) = delete; // Move assignment of abstract types is not possible.
+  Set & operator=(Set &&) = delete; 
 
 };
 

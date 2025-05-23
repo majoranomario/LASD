@@ -30,7 +30,7 @@ public:
 
   /* ************************************************************************ */
 
-  // Copy/Move assignment of abstract types is not possible.
+  // Copy/Move assignment of abstract types is not possible. (delete)
 
   // Copy assignment
   LinearContainer & operator=(const LinearContainer &) = delete;
@@ -165,7 +165,7 @@ public:
 
   /* ************************************************************************ */
 
-  // Copy/Movew assignment of abstract types is not possible.
+  // Copy/Move assignment of abstract types is not possible.
 
   // Copy assignment
   SortableLinearContainer & operator=(const SortableLinearContainer &) = delete;
@@ -176,6 +176,7 @@ public:
   /* ************************************************************************ */
 
   // Comparison operators Inherited from LinearContainer
+
   
   /* ************************************************************************ */
 

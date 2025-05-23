@@ -114,7 +114,6 @@ protected:
 
   // Auxiliary functions, if necessary!
 
-  //Node* BinarySearch(Node *& ref, ulong n, const Data & data) const noexcept;
   Node* DetachPredecessor(const Data & data);
   Node* DetachSuccessor(const Data & data);
 

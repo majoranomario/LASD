@@ -182,6 +182,7 @@ List<Data>& List<Data>::operator=(const List<Data> & list) {
       while (currentThis != nullptr) {
         Node* toDelete = currentThis;
         currentThis = currentThis->next;
+        toDelete->next = nullptr;
         delete toDelete;
       }
       // Properly terminate the list
@@ -328,8 +329,7 @@ template<typename Data>
 const Data & List<Data>::Back() const {
     if(tail != nullptr){
       return tail->element;
-    }
-    else{
+    }else{
       throw std::length_error("Access to an empty list");
     } 
 }
@@ -482,11 +482,11 @@ typename List<Data>::Node * List<Data>::DetachAtBack(){
       while (temp->next != tail) {
         temp = temp->next;
       }
-      Node* toReturn = tail;
+      Node* toDetach = tail;
       tail = temp;
       tail->next = nullptr;
       --size;
-      return toReturn;
+      return toDetach;
     }
   } else {
     throw std::length_error("Removing from an empty list");
@@ -497,15 +497,15 @@ typename List<Data>::Node * List<Data>::DetachAtBack(){
 template<typename Data>
 typename List<Data>::Node * List<Data>::DetachAtFront(){
   if (head != nullptr) {
-    Node* temp = head; 
+    Node* toDetach = head; 
     if (tail == head) { 
       head = tail = nullptr; 
     }else{
       head = head->next;
     }
     --size; 
-    temp->next = nullptr;
-    return temp; 
+    toDetach->next = nullptr;
+    return toDetach; 
   }
   else{
     throw std::length_error("Removing from an empty list");

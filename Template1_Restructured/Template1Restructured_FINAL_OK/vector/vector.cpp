@@ -23,7 +23,7 @@ Vector<Data>::Vector(const TraversableContainer<Data> & container) : Vector{cont
   ulong i = 0;
   container.Traverse(
     [this, &i](const Data & data){
-        elements[i++] = data;
+      elements[i++] = data;
     }
   );
 }
@@ -44,9 +44,9 @@ Vector<Data>::Vector(MappableContainer<Data> && container) : Vector(container.Si
 
 template<typename Data>
 Vector<Data>::Vector(const Vector<Data> & vector){
-    size = vector.Size(); //è lo stesso di usare .Size() ?
-    elements = new Data[size];
-    std::copy(vector.elements,vector.elements + size, elements);
+  size = vector.size; //è lo stesso di usare .Size() ?
+  elements = new Data[size];
+  std::copy(vector.elements,vector.elements + size, elements);
 }
 
 // Move constructor (Vector)
@@ -68,18 +68,15 @@ Vector<Data>::~Vector() {
 
 //no heap using, no possible memory leaks
 
-//non possono essere lanciate eccezioni, è incoerente
-//con l'assenza dl noexception?
-
 // Copy assignment (Vector)
 
 template<typename Data>
 Vector<Data> & Vector<Data>::operator=(const Vector<Data> & vector) {
-    if(this != &vector) {
-      Vector<Data> tmp(vector); // copy constructor
-      std::swap(*this, tmp);    // efficient swap
-    } 
-    return *this;
+  if(this != &vector) {
+    Vector<Data> tmp(vector); // copy constructor
+    std::swap(*this, tmp);    // efficient swap
+  } 
+  return *this;
 }
 
 // Move assignment (Vector)
@@ -97,17 +94,17 @@ Vector<Data> & Vector<Data>::operator=(Vector<Data> && vector) noexcept {
 
 template<typename Data>
 bool Vector<Data>::operator==(const Vector & vector) const noexcept {
-    if(this->size != vector.size) {
-        return false;
-    }
+  if(this->size != vector.size) {
+    return false;
+  }
 
-    for (ulong i = 0; i < size; ++i) {
-      if (elements[i] != vector.elements[i]) {
-        return false;
-      }
+  for (ulong i = 0; i < size; ++i) {
+    if (elements[i] != vector.elements[i]) {
+      return false;
     }
+  }
 
-    return true;
+  return true;
 }
 
 template<typename Data>
@@ -232,12 +229,14 @@ template<typename Data>
 SortableVector<Data>::SortableVector(const SortableVector & vector) : Vector<Data>(vector) {}
 
 // Move constructor
+
 template<typename Data>
 SortableVector<Data>::SortableVector(SortableVector && vector) : Vector<Data>(std::move(vector)) {}
 
 /* ************************************************************************ */
 
 // Copy assignment (SortableVector)
+
 template<typename Data>
 SortableVector<Data> & SortableVector<Data>::operator=(const SortableVector<Data> & vector) {
   Vector<Data>::operator=(vector);
@@ -245,6 +244,7 @@ SortableVector<Data> & SortableVector<Data>::operator=(const SortableVector<Data
 }
 
 // Move assignment (SortableVector)
+
 template<typename Data>
 SortableVector<Data>& SortableVector<Data>::operator=(SortableVector<Data>&& vector) noexcept {
   Vector<Data>::operator=(std::move(vector));

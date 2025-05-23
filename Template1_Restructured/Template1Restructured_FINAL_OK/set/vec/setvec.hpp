@@ -22,20 +22,26 @@ private:
 protected:
 
   using Container::size;
+  using Vector<Data>::elements;
+  ulong capacity;
   ulong head;
   ulong tail;
-  ulong capacity;
+  
+  using Vector<Data>::operator[];
+  using Vector<Data>::Front;
+  using Vector<Data>::Back;
 
 
 public:
 
   // Default constructor
-  SetVec() = default;
+  SetVec();
 
   /* ************************************************************************ */
 
   // Specific constructors
-  SetVec(ulong);
+
+  SetVec(ulong); 
   SetVec(const TraversableContainer<Data> & );
   SetVec(MappableContainer<Data> &&);
 
@@ -50,15 +56,15 @@ public:
   /* ************************************************************************ */
 
   // Destructor
-  ~SetVec();
+  virtual ~SetVec() = default;
 
   /* ************************************************************************ */
 
   // Copy assignment
-  Setvec<Data> & operator=(SetVec &);
+  SetVec<Data> & operator=(const SetVec &);
 
   // Move assignment
-  SetVec<Data> operator=(argument) specifiers;
+  SetVec<Data> & operator=(SetVec &&) noexcept;
 
   /* ************************************************************************ */
 
@@ -92,7 +98,7 @@ public:
 
   bool Insert(const Data &) override; // Override DictionaryContainer member (copy of the value)
   bool Insert(Data &&) override; // Override DictionaryContainer member (move of the value)
-  bool Remove(const Data &&) override; // Override DictionaryContainer member
+  bool Remove(const Data &) override; // Override DictionaryContainer member
 
   /* ************************************************************************ */
 
@@ -134,10 +140,20 @@ public:
 
   /* ************************************************************************ */
 
+  void PrintInfo(const std::string& name) const noexcept;
+  void PrintInside() const noexcept;
 
 protected:
 
-  // Auxiliary functions, if necessary!
+  // Auxiliary functions
+  ulong BinarySearch(const Data& data, ulong left, ulong right) const;
+  
+  void InsertAtPosition(ulong pos, const Data& );
+  void InsertAtPosition(ulong pos, Data&& data);
+  void RemoveAtPosition(ulong pos);
+
+  Data DetachPredecessor(const Data &);
+  Data DetachSuccessor(const Data &);
 
 };
 

@@ -1,6 +1,7 @@
 
 #ifndef CONTAINER_HPP
 #define CONTAINER_HPP
+
 /* for use ulong on all os*/
 #include <sys/types.h>
 
@@ -39,8 +40,8 @@ public:
   /* ************************************************************************ */
 
   // Comparison operators
-  // Comparison of abstract types is not possible. (delete)
-  bool operator==(const Container &) const noexcept = delete;
+
+  bool operator==(const Container &) const noexcept = delete;  // Comparison of abstract types is not possible (delete)
   bool operator!=(const Container &) const noexcept = delete;
 
   /* ************************************************************************ */
@@ -81,8 +82,8 @@ public:
   /* ************************************************************************ */
 
   // Comparison operators
-  // Comparison of abstract types is not possible (delete).
-  bool operator==(const ClearableContainer &) const noexcept = delete; 
+  
+  bool operator==(const ClearableContainer &) const noexcept = delete;  // Comparison of abstract types is not possible (delete)
   bool operator!=(const ClearableContainer &) const noexcept = delete;
 
   /* ************************************************************************ */
@@ -116,21 +117,22 @@ public:
   /* ************************************************************************ */
 
   // Comparison operators
-  // Comparison of abstract types is not possible. (delete)
-  bool operator==(const ResizableContainer &) const noexcept = delete;
+
+  bool operator==(const ResizableContainer &) const noexcept = delete; // Comparison of abstract types is not possible (delete)
   bool operator!=(const ResizableContainer &) const noexcept = delete;
   
   /* ************************************************************************ */
 
   // Specific member functions
+
   virtual void Resize(ulong) = 0;
 
   /* ************************************************************************ */
 
   // Specific member function (inherited from ClearableContainer)
-  // Override ClearableContainer member
+  
 
-  inline void Clear() override {
+  inline void Clear() override { // Override ClearableContainer member
     Resize(0);
   }
 

@@ -117,6 +117,7 @@ template<typename Data>
 Data SetLst<Data>::PredecessorNRemove(const Data & data){
     Node* temp = DetachPredecessor(data);
     Data predecessor = temp->element;
+    temp->next = nullptr;  // Importante: preserva il distruttore ricorsivo
     delete temp;
     return predecessor;
 }
@@ -124,6 +125,7 @@ Data SetLst<Data>::PredecessorNRemove(const Data & data){
 template<typename Data>
 void SetLst<Data>::RemovePredecessor(const Data & data) {
     Node* predecessor = DetachPredecessor(data);
+    predecessor->next = nullptr;
     delete predecessor;
 }
 
@@ -146,14 +148,16 @@ template<typename Data>
 Data SetLst<Data>::SuccessorNRemove(const Data& data) {
     Node* temp = DetachSuccessor(data);
     Data successor = temp->element;
+    temp->next = nullptr;
     delete temp; 
     return successor;
 }
 
 template<typename Data>
 void SetLst<Data>::RemoveSuccessor(const Data& data) {
-    Node* temp = DetachSuccessor(data);
-    delete temp; 
+    Node* successor = DetachSuccessor(data);
+    successor->next = nullptr;
+    delete successor; 
 }
 
 /* ************************************************************************ */
@@ -163,14 +167,14 @@ void SetLst<Data>::RemoveSuccessor(const Data& data) {
 template<typename Data>
 bool SetLst<Data>::Insert(Data && data) {
     if (head == nullptr) {
-        head = tail = new Node(std::move(data)); // Costruzione nodo senza next
+        head = tail = new Node(std::move(data)); 
         ++size;
         return true;
     }
 
     if (data < head->element) {
-        Node* newNode = new Node(std::move(data));  // Nodo senza next nel costruttore
-        newNode->next = head;                        // Imposto next manualmente
+        Node* newNode = new Node(std::move(data));  
+        newNode->next = head;                        
         head = newNode;
         ++size;
         return true;
@@ -182,11 +186,11 @@ bool SetLst<Data>::Insert(Data && data) {
     }
 
     if (curr->next != nullptr && curr->next->element == data) {
-        return false; // elemento già presente
+        return false; // already in 
     }
 
-    Node* newNode = new Node(std::move(data));  // Nodo costruito senza next
-    newNode->next = curr->next;                  // imposto next manualmente
+    Node* newNode = new Node(std::move(data)); 
+    newNode->next = curr->next;                  
     curr->next = newNode;
 
     if (newNode->next == nullptr) {
@@ -201,14 +205,14 @@ bool SetLst<Data>::Insert(Data && data) {
 template<typename Data>
 bool SetLst<Data>::Insert(const Data & data) {
     if (head == nullptr) {
-        head = tail = new Node(data); // Costruzione nodo senza next
+        head = tail = new Node(data); 
         ++size;
         return true;
     }
 
     if (data < head->element) {
-        Node* newNode = new Node(data);  // Nodo senza next nel costruttore
-        newNode->next = head;                        // Imposto next manualmente
+        Node* newNode = new Node(data);  
+        newNode->next = head;                      
         head = newNode;
         ++size;
         return true;
@@ -220,11 +224,11 @@ bool SetLst<Data>::Insert(const Data & data) {
     }
 
     if (curr->next != nullptr && curr->next->element == data) {
-        return false; // elemento già presente
+        return false; // already in 
     }
 
-    Node* newNode = new Node(data);  // Nodo costruito senza next
-    newNode->next = curr->next;                  // imposto next manualmente
+    Node* newNode = new Node(data);  
+    newNode->next = curr->next;                  
     curr->next = newNode;
 
     if (newNode->next == nullptr) {
@@ -249,6 +253,7 @@ bool SetLst<Data>::Remove(const Data& data) {
         if (head == nullptr) {
             tail = nullptr;
         }
+        toDelete->next = nullptr;
         delete toDelete;
         --size;
         return true;
@@ -268,6 +273,7 @@ bool SetLst<Data>::Remove(const Data& data) {
     if (toDelete == tail) {
         tail = curr;
     }
+    toDelete->next = nullptr; 
     delete toDelete;
     --size;
     return true;
@@ -309,7 +315,7 @@ bool SetLst<Data>::Exists(const Data& data) const noexcept {
             return true;
         }
         if (curr->element > data) {
-            return false; // Since the list is sorted, we can stop early
+            return false; // Since the list is sorted, early stop 
         }
         curr = curr->next;
     }
@@ -339,59 +345,66 @@ typename List<Data>::Node* SetLst<Data>::DetachPredecessor(const Data & data) {
     Node* prev = nullptr;
     Node* beforePrev = nullptr;
 
+    // Traverse until we find the first node >= data
     while (curr != nullptr && curr->element < data) {
         beforePrev = prev;
         prev = curr;
         curr = curr->next;
     }
 
-    if (prev == nullptr) {
-        throw std::out_of_range("No predecessor exists.");
-    }
-
+    // Remove prev (last node < data)
     Node* toDetach = prev;
+
     if (beforePrev == nullptr) {
-        // Predecessor is the head
+        // Predecessor is the first node
         head = head->next;
-        if (head == nullptr) {
-            tail = nullptr;
-        }
+        if (head == nullptr) tail = nullptr;
     } else {
         beforePrev->next = prev->next;
-        if (prev == tail) {
-            tail = beforePrev;
-        }
+        if (prev == tail) tail = beforePrev;
     }
 
     --size;
+    // To avoid calling the recursive destructor
     toDetach->next = nullptr;
     return toDetach;
 }
 
+
 template<typename Data>
 typename List<Data>::Node* SetLst<Data>::DetachSuccessor(const Data & data) {
-    Node* curr = head;
-
-    // Find the node with the given data
-    while (curr != nullptr && curr->element != data) {
-        curr = curr->next;
-    }
-
-    if (curr == nullptr || curr->next == nullptr) {
+    if (head == nullptr) {
         throw std::out_of_range("No successor exists.");
     }
 
-    Node* successor = curr->next;
-    curr->next = successor->next;
-    
-    if (successor == tail) {
-        tail = curr;
+    Node* curr = head;
+    Node* prev = nullptr;
+
+    // Traverse until we find the first node > data
+    while (curr != nullptr && curr->element <= data) {
+        prev = curr;
+        curr = curr->next;
+    }
+
+    if (curr == nullptr) {
+        throw std::out_of_range("No successor exists.");
+    }
+
+    // Removes the current node (the logical successor)
+    if (prev == nullptr) {
+        // Successor is the first node
+        head = head->next;
+        if (head == nullptr) tail = nullptr;
+    } else {
+        prev->next = curr->next;
+        if (curr == tail) tail = prev;
     }
 
     --size;
-    successor->next = nullptr;
-    return successor;
+    curr->next = nullptr;
+    return curr;
 }
+
 
 /* ************************************************************************ */
 

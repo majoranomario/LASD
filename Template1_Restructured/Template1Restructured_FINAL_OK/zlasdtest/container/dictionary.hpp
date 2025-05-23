@@ -4,7 +4,6 @@
 
 #include "../../container/dictionary.hpp"
 #include <iostream>
-#include <iostream>
 #include <stdexcept>
 
 /* ************************************************************************** */
