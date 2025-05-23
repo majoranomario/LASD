@@ -43,8 +43,8 @@ SetLst<Data> & SetLst<Data>::operator=(const SetLst & setlist){
 
 // Move assignment
 template<typename Data>
-SetLst<Data>& SetLst<Data>::operator=(SetLst && other) noexcept {
-    List<Data>::operator=(std::move(other));
+SetLst<Data>& SetLst<Data>::operator=(SetLst && setlist) noexcept {
+    List<Data>::operator=(std::move(setlist));
     return *this;
 }
 
@@ -107,7 +107,7 @@ const Data& SetLst<Data>::Predecessor(const Data& data) const {
     }
 
     if (prev == nullptr || head == nullptr) {
-        throw std::out_of_range("Non esiste un predecessore.");
+        throw std::out_of_range("Non predecessor exists.");
     }
 
     return prev->element;
@@ -117,7 +117,7 @@ template<typename Data>
 Data SetLst<Data>::PredecessorNRemove(const Data & data){
     Node* temp = DetachPredecessor(data);
     Data predecessor = temp->element;
-    temp->next = nullptr;  // Importante: preserva il distruttore ricorsivo
+    temp->next = nullptr;  //Important: preserves the recursive destructor
     delete temp;
     return predecessor;
 }
@@ -138,7 +138,7 @@ const Data & SetLst<Data>::Successor(const Data& data) const {
     }
 
     if (curr == nullptr || head == nullptr) {
-        throw std::out_of_range("Non esiste un successore.");
+        throw std::out_of_range("No successor exists.");
     }
 
     return curr->element;
@@ -163,43 +163,6 @@ void SetLst<Data>::RemoveSuccessor(const Data& data) {
 /* ************************************************************************ */
 
 // Specific member functions (inherited from DictionaryContainer)
-
-template<typename Data>
-bool SetLst<Data>::Insert(Data && data) {
-    if (head == nullptr) {
-        head = tail = new Node(std::move(data)); 
-        ++size;
-        return true;
-    }
-
-    if (data < head->element) {
-        Node* newNode = new Node(std::move(data));  
-        newNode->next = head;                        
-        head = newNode;
-        ++size;
-        return true;
-    }
-
-    Node* curr = head;
-    while (curr->next != nullptr && curr->next->element < data) {
-        curr = curr->next;
-    }
-
-    if (curr->next != nullptr && curr->next->element == data) {
-        return false; // already in 
-    }
-
-    Node* newNode = new Node(std::move(data)); 
-    newNode->next = curr->next;                  
-    curr->next = newNode;
-
-    if (newNode->next == nullptr) {
-        tail = newNode;
-    }
-
-    ++size;
-    return true;
-}
 
 
 template<typename Data>
@@ -239,7 +202,45 @@ bool SetLst<Data>::Insert(const Data & data) {
     return true;
 }
 
+template<typename Data>
+bool SetLst<Data>::Insert(Data && data) {
+    if (head == nullptr) {
+        head = tail = new Node(std::move(data)); 
+        ++size;
+        return true;
+    }
 
+    // Insert at front if smaller than head
+    if (data < head->element) {
+        Node* newNode = new Node(std::move(data));  
+        newNode->next = head;                        
+        head = newNode;
+        ++size;
+        return true;
+    }
+
+    Node* curr = head;
+    while (curr->next != nullptr && curr->next->element < data) {
+        curr = curr->next;
+    }
+
+    // Traverse until insertion point is found
+    if (curr->next != nullptr && curr->next->element == data) {
+        return false;     // Do not insert if already present
+    }
+
+    // Insert new node
+    Node* newNode = new Node(std::move(data)); 
+    newNode->next = curr->next;                  
+    curr->next = newNode;
+
+    if (newNode->next == nullptr) {
+        tail = newNode;
+    }
+
+    ++size;
+    return true;
+}
 
 template<typename Data>
 bool SetLst<Data>::Remove(const Data& data) {
@@ -268,6 +269,7 @@ bool SetLst<Data>::Remove(const Data& data) {
         return false;
     }
 
+    
     Node* toDelete = curr->next;
     curr->next = toDelete->next;
     if (toDelete == tail) {

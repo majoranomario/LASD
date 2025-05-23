@@ -44,7 +44,7 @@ Vector<Data>::Vector(MappableContainer<Data> && container) : Vector(container.Si
 
 template<typename Data>
 Vector<Data>::Vector(const Vector<Data> & vector){
-  size = vector.size; //è lo stesso di usare .Size() ?
+  size = vector.size; 
   elements = new Data[size];
   std::copy(vector.elements,vector.elements + size, elements);
 }
@@ -54,6 +54,8 @@ template<typename Data>
 Vector<Data>::Vector(Vector<Data> && vector) noexcept {
   std::swap(size, vector.size);
   std::swap(elements, vector.elements);
+  vector.size = 0; 
+  vector.elements = nullptr;
 }
 
 /* ************************************************************************** */

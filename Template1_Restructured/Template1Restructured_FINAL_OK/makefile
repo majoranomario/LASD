@@ -7,16 +7,16 @@ objects = main.o container.o myexc1a.o myexc1b.o mytest.o #test.o exc1as.o exc1a
 
 libcon = container/container.hpp container/testable.hpp container/traversable.hpp container/traversable.cpp container/mappable.hpp container/mappable.cpp container/dictionary.hpp container/dictionary.cpp container/linear.hpp container/linear.cpp
 
-libexc = $(libcon) zlasdtest/container/container.hpp zlasdtest/container/testable.hpp zlasdtest/container/traversable.hpp zlasdtest/container/mappable.hpp zlasdtest/container/dictionary.hpp zlasdtest/container/linear.hpp
+#libexc = $(libcon) zlasdtest/container/container.hpp zlasdtest/container/testable.hpp zlasdtest/container/traversable.hpp zlasdtest/container/mappable.hpp zlasdtest/container/dictionary.hpp zlasdtest/container/linear.hpp
 
-#libexc = $(libcon) zmytest/container/container.hpp zmytest/container/testable.hpp zmytest/container/traversable.hpp zmytest/container/mappable.hpp zmytest/container/dictionary.hpp zmytest/container/linear.hpp
+libexc = $(libcon) zmytest/container/container.hpp zmytest/container/testable.hpp zmytest/container/traversable.hpp zmytest/container/mappable.hpp zmytest/container/dictionary.hpp zmytest/container/linear.hpp
 
 libexc1a = $(libexc) vector/vector.hpp vector/vector.cpp list/list.hpp list/list.cpp
 
 libexc1b = $(libexc1a) set/set.hpp set/lst/setlst.hpp set/lst/setlst.cpp set/vec/setvec.hpp set/vec/setvec.cpp
 
 main: $(objects)
-	$(cc) $(cflags) $(objects) -g -o main
+	$(cc) $(cflags) $(objects) -o main
 
 clean:
 	clear; rm -rfv *.o; rm -fv main

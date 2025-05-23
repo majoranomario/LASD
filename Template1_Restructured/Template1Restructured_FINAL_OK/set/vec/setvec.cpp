@@ -13,7 +13,7 @@ SetVec<Data>::SetVec() : Vector<Data>(4) {  // Start with reasonable capacity
 }
 
 template<typename Data>
-SetVec<Data>::SetVec(ulong newCapacity) : Vector<Data>(newCapacity) {
+SetVec<Data>::SetVec(ulong newCapacity) : Vector<Data>(newCapacity) { //Call inherited constructor of Vector<Data> 
     capacity = newCapacity;
     size = 0;
     head = 0;
@@ -22,7 +22,8 @@ SetVec<Data>::SetVec(ulong newCapacity) : Vector<Data>(newCapacity) {
 
 /* ************************************************************************ */
 
-// Specific constructors
+// Specific constructors 
+
 template<typename Data>
 SetVec<Data>::SetVec(const TraversableContainer<Data>& container) : SetVec(container.Size()) {
     container.Traverse([this](const Data& data) {
@@ -42,14 +43,14 @@ SetVec<Data>::SetVec(MappableContainer<Data>&& container) : SetVec(container.Siz
 
 // Copy Constructor
 template<typename Data>
-SetVec<Data>::SetVec(const SetVec<Data>& setVector) : Vector<Data>(setVector.capacity) {  // chiama costruttore base con capacità corretta
+SetVec<Data>::SetVec(const SetVec<Data>& setVector) : Vector<Data>(setVector.capacity) { //Call inherited constructor of Vector<Data>  
     size = setVector.size;
     head = setVector.head;
     tail = setVector.tail;
     capacity = setVector.capacity;
 
     for (ulong i = 0; i < size; ++i) {
-        elements[(head + i) % capacity] = setVector.elements[(setVector.head + i) % capacity];
+        elements[(head + i) % capacity] = setVector.elements[(setVector.head + i) % capacity]; //Copy of all the elements considering the circular structure
     }
 }
 
@@ -135,8 +136,8 @@ Data SetVec<Data>::MinNRemove() {
     head = (head + 1) % capacity;
     --size;
     
-    // Shrink if needed
-    if (capacity > 4 && size <= capacity / 4) {
+    // Shrink if needed when size <= 25% of capacity
+    if (capacity > 4 && size <= static_cast<ulong>(capacity * 0.25)) {
         Resize(capacity / 2);
     }
     
@@ -152,8 +153,8 @@ void SetVec<Data>::RemoveMin() {
     head = (head + 1) % capacity;
     --size;
     
-    // Shrink if needed
-    if (capacity > 4 && size <= capacity / 4) {
+    // Shrink if needed when size <= 25% of capacity
+    if (capacity > 4 && size <= static_cast<ulong>(capacity * 0.25)) {
         Resize(capacity / 2);
     }
 }
@@ -176,8 +177,8 @@ Data SetVec<Data>::MaxNRemove() {
     tail = (tail == 0) ? capacity - 1 : tail - 1;
     --size;
     
-    // Shrink if needed
-    if (capacity > 4 && size <= capacity / 4) {
+    // Shrink if needed when size <= 25% of capacity
+    if (capacity > 4 && size <= static_cast<ulong>(capacity * 0.25)) {
         Resize(capacity / 2);
     }
     
@@ -193,8 +194,8 @@ void SetVec<Data>::RemoveMax() {
     tail = (tail == 0) ? capacity - 1 : tail - 1;
     --size;
     
-    // Shrink if needed
-    if (capacity > 4 && size <= capacity / 4) {
+    // Shrink if needed when size <= 25% of capacity
+    if (capacity > 4 && size <= static_cast<ulong>(capacity * 0.25)) {
         Resize(capacity / 2);
     }
 }
@@ -274,7 +275,10 @@ void SetVec<Data>::RemoveSuccessor(const Data& data) {
 template<typename Data>
 bool SetVec<Data>::Insert(const Data& data) {
     // Resize if needed
-    if (size == capacity) {
+
+    // Use static_cast to explicitly convert the result of (capacity * 0.9) from double to ulong.
+    // This avoids implicit conversion warnings and ensures the comparison with size (ulong) is type-safe.
+    if (size >= static_cast<ulong>(capacity * 0.9)) {
         Resize(capacity * 2);
     }
 
@@ -300,7 +304,7 @@ bool SetVec<Data>::Insert(const Data& data) {
 template<typename Data>
 bool SetVec<Data>::Insert(Data&& data) {
     // Resize if needed
-    if (size == capacity) {
+    if (size >= static_cast<ulong>(capacity * 0.9)){
         Resize(capacity * 2);
     }
 
@@ -337,8 +341,8 @@ bool SetVec<Data>::Remove(const Data& data) {
 
     RemoveAtPosition(pos);
     
-    // Shrink if needed
-    if (capacity > 4 && size <= capacity / 4) {
+    // Shrink if needed when size <= 25% of capacity
+    if (capacity > 4 && size <= static_cast<ulong>(capacity * 0.25)) {
         Resize(capacity / 2);
     }
     
@@ -418,6 +422,7 @@ void SetVec<Data>::Clear() {
 /* ************************************************************************ */
 
 // ResizableContainer function
+
 template<typename Data>
 void SetVec<Data>::Resize(ulong newCapacity) {
     if (newCapacity < size) {
@@ -444,7 +449,11 @@ void SetVec<Data>::Resize(ulong newCapacity) {
 
 /* ************************************************************************ */
 
-// Auxiliary functions
+// Auxiliary function
+
+// Binary search is used because the elements in SetVec are assumed to be sorted.
+// This algorithm significantly reduces search time from O(n) to O(log n),
+
 template<typename Data>
 ulong SetVec<Data>::BinarySearch(const Data& data, ulong left, ulong right) const {
     // Handle empty container
@@ -455,6 +464,8 @@ ulong SetVec<Data>::BinarySearch(const Data& data, ulong left, ulong right) cons
         return left;  // Return insertion point
     }
     
+    // Calculate the middle index between left and right without risking integer overflow.
+    // Instead of (left + right) / 2, this formula subtracts first, ensuring safe addition.
     ulong mid = left + (right - left) / 2;
     const Data& midValue = (*this)[mid];
     
@@ -609,8 +620,8 @@ Data SetVec<Data>::DetachPredecessor(const Data& data) {
     Data pred = std::move((*this)[predPos]);
     RemoveAtPosition(predPos);
     
-    // Shrink if needed
-    if (capacity > 4 && size <= capacity / 4) {
+    // Shrink if needed when size <= 25% of capacity
+    if (capacity > 4 && size <= static_cast<ulong>(capacity * 0.25)) {
         Resize(capacity / 2);
     }
     
@@ -642,8 +653,8 @@ Data SetVec<Data>::DetachSuccessor(const Data& data) {
     Data succ = std::move((*this)[succPos]);
     RemoveAtPosition(succPos);
     
-    // Shrink if needed
-    if (capacity > 4 && size <= capacity / 4) {
+    // Shrink if needed when size <= 25% of capacity
+    if (capacity > 4 && size <= static_cast<ulong>(capacity * 0.25)) {
         Resize(capacity / 2);
     }
     
