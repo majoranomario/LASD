@@ -39,7 +39,7 @@ public:
 
   bool IsHeap(Heap) specifiers;
 
-  bool Heapify(argument) specifiers;
+  void Heapify(argument) specifiers;
 
 };
 
