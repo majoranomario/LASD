@@ -15,6 +15,8 @@ using namespace std;
 #include "../set/set.hpp"
 #include "../set/lst/setlst.hpp"
 #include "../set/vec/setvec.hpp"
+#include "../heap/heap.hpp"
+#include "../heap/vec/heapvec.hpp"
 
 #include "../zmytest/exercise1a/test.hpp"
 #include "../zmytest/exercise1b/test.hpp"
@@ -28,7 +30,11 @@ void mytest() {
      
     cout << endl << "~*~#~*~ Welcome to the LASD Test Suite ~*~#~*~ " << endl;
 
-    
+    HeapVec<int> heap1 = HeapVec<int>();
+    cout << heap1.IsHeap();
+    heap1.
+
+    /*
     uint loctestnum, loctesterr;
     uint stestnum = 0, stesterr = 0;
 
@@ -45,15 +51,7 @@ void mytest() {
     cout << "TOTALE TEST ESEGUITI: " << stestnum << endl;
     cout << "TOTALE ERRORI:        " << stesterr << endl;
     cout << "======================" << endl;
-    
-
-    /*SetVec<int> set1 = SetVec<int>();
-
-    set1.Insert(5);
-
-    SetVec<int> set2 = SetVec<int>(set1);
-
-    cout << (set1 == set2);*/
+    */
 
     cout << "\n=== FINE TEST ===" << endl;
 }

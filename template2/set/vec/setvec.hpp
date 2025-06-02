@@ -140,17 +140,14 @@ public:
 
   /* ************************************************************************ */
 
-  void PrintInfo(const std::string& name) const noexcept;
-  void PrintInside() const noexcept;
-
 protected:
 
   // Auxiliary functions
-  ulong BinarySearch(const Data& data, ulong left, ulong right) const;
+  ulong BinarySearch(const Data&, ulong, ulong) const;
   
-  void InsertAtPosition(ulong pos, const Data& );
-  void InsertAtPosition(ulong pos, Data&& data);
-  void RemoveAtPosition(ulong pos);
+  void InsertAtPosition(ulong, const Data& );
+  void InsertAtPosition(ulong, Data&&);
+  void RemoveAtPosition(ulong);
 
   Data DetachPredecessor(const Data &);
   Data DetachSuccessor(const Data &);

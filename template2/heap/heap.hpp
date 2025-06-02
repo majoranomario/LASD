@@ -28,18 +28,18 @@ public:
   /* ************************************************************************ */
 
   // Copy assignment
-  Heap & operator=(const Heap &); // Copy assignment of abstract types is not possible.
+  Heap & operator=(const Heap &) = delete; // Copy assignment of abstract types is not possible.
 
   // Move assignment
-  Heap & operator=(Heap &&); // Move assignment of abstract types is not possible.
+  Heap & operator=(Heap &&) = delete; // Move assignment of abstract types is not possible.
 
   /* ************************************************************************ */
 
   // Specific member functions
 
-  bool IsHeap(Heap) specifiers;
+  virtual bool IsHeap() const noexcept = 0 ;
 
-  void Heapify(ulong, ulong) specifiers;
+  virtual void Heapify() noexcept = 0;
 
 };
 
