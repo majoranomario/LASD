@@ -20,6 +20,7 @@ using namespace std;
 
 #include "../zmytest/exercise1a/test.hpp"
 #include "../zmytest/exercise1b/test.hpp"
+#include "../zmytest/exercise2a/test.hpp"
 
 
 /* ************************************************************************** */
@@ -28,16 +29,12 @@ using namespace lasd;
 
 void mytest() {
      
-    cout << endl << "~*~#~*~ Welcome to the LASD Test Suite ~*~#~*~ " << endl;
+    cout << endl << "~*~#~*~ Welcome to the LASD MyTest Suite ~*~#~*~ " << endl;
 
-    HeapVec<int> heap1 = HeapVec<int>();
-    cout << heap1.IsHeap();
-    heap1.
-
-    /*
     uint loctestnum, loctesterr;
     uint stestnum = 0, stesterr = 0;
 
+    /*
     // Esegui test dell'esercizio 1A
     testSimpleExercise1A(loctestnum, loctesterr);
     stestnum += loctestnum; stesterr += loctesterr;
@@ -45,13 +42,18 @@ void mytest() {
     // Esegui test dell'esercizio 1B
     testSimpleExercise1B(loctestnum, loctesterr);
     stestnum += loctestnum; stesterr += loctesterr;
+    */
+
+    // Execute test of Exercise 2A
+    testSimpleExercise2A(loctestnum, loctesterr);
+    stestnum += loctestnum; stesterr += loctesterr;
 
     // Sommario generale
     cout << endl << "======================" << endl;
     cout << "TOTALE TEST ESEGUITI: " << stestnum << endl;
     cout << "TOTALE ERRORI:        " << stesterr << endl;
     cout << "======================" << endl;
-    */
+    
 
     cout << "\n=== FINE TEST ===" << endl;
 }

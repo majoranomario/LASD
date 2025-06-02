@@ -80,9 +80,10 @@ public:
 
 protected:
 
-  // Auxiliary functions, if necessary!
+  // Auxiliary functions
 
   void Heapify(ulong,ulong) noexcept;
+
 
 };
 
