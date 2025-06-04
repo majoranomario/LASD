@@ -10,6 +10,7 @@
 #include "../container/linear.hpp"
 
 #include "../vector/vector.hpp"
+#include "../heap/heap.hpp"
 
 #include "../pq/pq.hpp"
 

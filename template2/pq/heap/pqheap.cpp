@@ -4,6 +4,7 @@ namespace lasd {
 /* ************************************************************************** */
 
 // Default constructor
+
 template <typename Data>
 PQHeap<Data>::PQHeap() : HeapVec<Data>() {}
 
@@ -12,10 +13,10 @@ PQHeap<Data>::PQHeap() : HeapVec<Data>() {}
 // Specific constructors
 
 template <typename Data>
-PQHeap<Data>::PQHeap(const TraversableContainer & container) : HeapVec<Data>(container) {}
+PQHeap<Data>::PQHeap(const TraversableContainer<Data>& container) : HeapVec<Data>(container) {}
 
 template <typename Data>
-PQHeap<Data>::PQHeap(MappableContainer && container) : HeapVec<Data>(std::move(container)) {}
+PQHeap<Data>::PQHeap(MappableContainer<Data>&& container) : HeapVec<Data>(container) {}
 
 /* ************************************************************************ */
 
@@ -48,7 +49,7 @@ PQHeap<Data> & PQHeap<Data>::operator=(PQHeap<Data>&& PQHeap) noexcept {
 // Specific member functions (inherited from PQ)
 
 template <typename Data>
-Data & PQHeap<Data>::Tip() const {
+const Data & PQHeap<Data>::Tip() const {
     if (size == 0) {
         throw std::length_error("Priority Queue is empty");
     }
@@ -81,23 +82,96 @@ Data PQHeap<Data>::TipNRemove() {
     }
 
     // Store the element with the highest priority (the root of the heap)
-    Data tip = std::move(HeapVec<Data>::operator ); 
+    Data tip = std::move(HeapVec<Data>::operator[](0));
+    
+    std::cout << tip;
 
-    // Move the last element in the heap to the root position
-    HeapVec<Data>::operator  = std::move(HeapVec<Data>::operator[](size - 1));
-
+    HeapVec<Data>::operator[](0) = std::move(HeapVec<Data>::operator[](size - 1));
+    // Reduce the size of the heap by one (effectively removing the last element)
     HeapVec<Data>::Resize(size - 1);
     
-    // Restore the heap property by pushing the new root down, if the heap is not empty
+    // Restore heap property from root down
     if (size > 0) {
         HeapifyDown(0);
     }
 
-    // Return the original tip element
     return tip;
 }
 
 template <typename Data>
-void PQHeap<Data>::Insert(const Data &) {
-    
+void PQHeap<Data>::Insert(const Data& value) {
+    HeapVec<Data>::Resize(size + 1);
+    //Insert in Queue 
+    HeapVec<Data>::operator[](size - 1) = value;
+    HeapifyUp(size - 1);
+}
+
+template <typename Data>
+void PQHeap<Data>::Insert(Data&& value) noexcept {
+    HeapVec<Data>::Resize(size + 1);
+    //Insert in Queue 
+    HeapVec<Data>::operator[](size - 1) = std::move(value);
+    HeapifyUp(size - 1);
+}
+
+template <typename Data>
+void PQHeap<Data>::Change(ulong index, const Data& value) {
+    if (index >= size) {
+        throw std::out_of_range("Index out of range");
+    }
+
+    Data& current = HeapVec<Data>::operator[](index);
+    if (value > current) {
+        current = value;
+        HeapifyUp(index);
+    } else if (value < current) {
+        current = value;
+        HeapifyDown(index);
+    }
+    // If equal, do nothing
+}
+
+template <typename Data>
+void PQHeap<Data>::Change(ulong index,Data&& value) {
+    if (index >= size) {
+        throw std::out_of_range("Index out of range");
+    }
+
+    Data& current = HeapVec<Data>::operator[](index);
+    if (value > current) {
+        current = value;
+        HeapifyUp(index);
+    } else if (value < current) {
+        current = value;
+        HeapifyDown(index);
+    }
+    // If equal, do nothing
+}
+
+/* ************************************************************************** */
+
+// Auxiliary functions
+
+template <typename Data>
+void PQHeap<Data>::HeapifyUp(ulong index) {
+    while (index > 0) {
+        ulong parent = (index - 1) / 2;
+        
+        // If heap property is satisfied, stop
+        if (HeapVec<Data>::operator[](parent) >= HeapVec<Data>::operator[](index)) {
+            break;
+        }
+        
+        // Swap with parent and continue
+        std::swap(HeapVec<Data>::operator[](parent), HeapVec<Data>::operator[](index));
+        index = parent;
+    }
+}
+
+template <typename Data>
+void PQHeap<Data>::HeapifyDown(ulong index) {
+    //Stub function - calls Standard Heapify(ulong,ulong) from index, inherited from HeapVec
+    HeapVec<Data>::Heapify(size,index);
+}
+
 }

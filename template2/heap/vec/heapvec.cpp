@@ -94,7 +94,6 @@ bool HeapVec<Data>::IsHeap() const noexcept {
     return true;
 }
 
-
 template<typename Data>
 void HeapVec<Data>::Heapify() noexcept {
     if (size <= 1) return;

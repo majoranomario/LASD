@@ -23,12 +23,10 @@ protected:
 
   using Container::size;
 
-  using HeapVec::elements;
-
 public:
 
   // Default constructor
-  PQHeap() = default;
+  PQHeap();
 
   /* ************************************************************************ */
 
@@ -52,16 +50,16 @@ public:
   /* ************************************************************************ */
 
   // Copy assignment
-  PQHeap operator=(const PQHeap<Data> &);
+  PQHeap & operator=(const PQHeap<Data> &);
 
   // Move assignment
-  PQHeap operator=(PQHeap<Data> &&) noexcept;
+  PQHeap & operator=(PQHeap<Data> &&) noexcept;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from PQ)
 
-  Data & Tip() const override; // Override PQ member (must throw std::length_error when empty)
+  const Data & Tip() const override; // Override PQ member (must throw std::length_error when empty)
   void RemoveTip() override; // Override PQ member (must throw std::length_error when empty)
   Data TipNRemove() override; // Override PQ member (must throw std::length_error when empty)
 
@@ -69,11 +67,14 @@ public:
   void Insert(Data &&) noexcept override; // Override PQ member (Move of the value)
 
   void Change(ulong,const Data &) override; // Override PQ member (Copy of the value)
-  void Change(ulong,Data &&) noexcept override; // Override PQ member (Move of the value)
+  void Change(ulong,Data &&) override; // Override PQ member (Move of the value)
 
 protected:
 
-  // Auxiliary functions, if necessary!
+  // Auxiliary functions
+
+  void HeapifyUp(ulong);
+  void HeapifyDown(ulong);
 
 };
 

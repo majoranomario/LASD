@@ -23,7 +23,7 @@ protected:
 public:
 
   //Destructor
-  virtual ~Heap();
+  virtual ~Heap() = default;
 
   /* ************************************************************************ */
 

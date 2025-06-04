@@ -24,7 +24,6 @@ void TestHeapInt(uint & testnum, uint & testerr) {
     cout << endl << "Begin of Heap<int> Test:" << endl;
     try {
 
-
     // Test 1: Basic construction and heap property verification
     cout << "--- Test 1: Basic Construction ---" << endl;
     lasd::Vector<int> vec(14);
@@ -234,7 +233,7 @@ void TestHeapInt(uint & testnum, uint & testerr) {
     GetAt(loctestnum, loctesterr, equalHeap, false, 1000, 0);
 
     
-    // --- Duplicates ---
+    // Duplicates
     cout << "--- Test: Multiple Heapify and Sort ---" << endl;
     lasd::HeapVec<int> repeatHeap(equalHeap);
     Traverse(loctestnum, loctesterr, repeatHeap, true, &TraversePrint<int>);
@@ -258,6 +257,7 @@ void TestHeapInt(uint & testnum, uint & testerr) {
     testnum += loctestnum;
     testerr += loctesterr;
 }
+
 
 void TestHeapDouble(uint & testnum, uint & testerr) {
     uint loctestnum = 0, loctesterr = 0;
@@ -373,6 +373,7 @@ void TestHeapDouble(uint & testnum, uint & testerr) {
     testerr += loctesterr;
     }
   }
+
   
 
 void TestHeapString(uint & testnum, uint & testerr) {

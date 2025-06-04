@@ -11,7 +11,6 @@ using namespace std;
 #include "../container/mappable.hpp"
 #include "../container/linear.hpp"
 #include "../vector/vector.hpp"
-#include "../list/list.hpp"
 #include "../set/set.hpp"
 #include "../set/lst/setlst.hpp"
 #include "../set/vec/setvec.hpp"
@@ -21,6 +20,7 @@ using namespace std;
 #include "../zmytest/exercise1a/test.hpp"
 #include "../zmytest/exercise1b/test.hpp"
 #include "../zmytest/exercise2a/test.hpp"
+#include "../zmytest/exercise2b/test.hpp"
 
 
 /* ************************************************************************** */
@@ -34,18 +34,21 @@ void mytest() {
     uint loctestnum, loctesterr;
     uint stestnum = 0, stesterr = 0;
 
-    /*
-    // Esegui test dell'esercizio 1A
+    
+    // Execute test of Exercise 1A  
     testSimpleExercise1A(loctestnum, loctesterr);
     stestnum += loctestnum; stesterr += loctesterr;
 
-    // Esegui test dell'esercizio 1B
+    // Execute test of Exercise 1B
     testSimpleExercise1B(loctestnum, loctesterr);
     stestnum += loctestnum; stesterr += loctesterr;
-    */
 
     // Execute test of Exercise 2A
     testSimpleExercise2A(loctestnum, loctesterr);
+    stestnum += loctestnum; stesterr += loctesterr;
+    
+
+    testSimpleExercise2B(loctestnum, loctesterr);
     stestnum += loctestnum; stesterr += loctesterr;
 
     // Sommario generale
